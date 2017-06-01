@@ -42,6 +42,59 @@ INSERT INTO `_group` VALUES ('festa',0,7,'public'),('festa',0,8,'public');
 UNLOCK TABLES;
 
 --
+-- Table structure for table `_range`
+--
+
+DROP TABLE IF EXISTS `_range`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `_range` (
+  `f_boost_shop` int(11) NOT NULL,
+  `f_stock` int(11) NOT NULL,
+  `rang_id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`rang_id`),
+  KEY `f_stock_range` (`f_stock`),
+  CONSTRAINT `f_stock_range` FOREIGN KEY (`f_stock`) REFERENCES `stock` (`stock_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `_range`
+--
+
+LOCK TABLES `_range` WRITE;
+/*!40000 ALTER TABLE `_range` DISABLE KEYS */;
+/*!40000 ALTER TABLE `_range` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `_return`
+--
+
+DROP TABLE IF EXISTS `_return`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `_return` (
+  `reusable` tinyint(1) DEFAULT '0',
+  `date_begin` date NOT NULL,
+  `date_end` date NOT NULL,
+  `cost` float(10,2) NOT NULL DEFAULT '0.00',
+  `way` enum('product','money','card') NOT NULL,
+  `return_id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`return_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `_return`
+--
+
+LOCK TABLES `_return` WRITE;
+/*!40000 ALTER TABLE `_return` DISABLE KEYS */;
+/*!40000 ALTER TABLE `_return` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `_trigger`
 --
 
@@ -85,9 +138,9 @@ CREATE TABLE `acesse` (
   `f_stock` int(11) NOT NULL,
   PRIMARY KEY (`acesse_id`),
   KEY `f_profile_acesse` (`f_profile`),
-  KEY `f_stokc_acesse` (`f_stock`),
+  KEY `f_stock_acesse` (`f_stock`),
   CONSTRAINT `f_profile_acesse` FOREIGN KEY (`f_profile`) REFERENCES `profile` (`profile_id`),
-  CONSTRAINT `f_stokc_acesse` FOREIGN KEY (`f_stock`) REFERENCES `stock` (`stock_id`)
+  CONSTRAINT `f_stock_acesse` FOREIGN KEY (`f_stock`) REFERENCES `stock` (`stock_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -98,6 +151,34 @@ CREATE TABLE `acesse` (
 LOCK TABLES `acesse` WRITE;
 /*!40000 ALTER TABLE `acesse` DISABLE KEYS */;
 /*!40000 ALTER TABLE `acesse` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `activity`
+--
+
+DROP TABLE IF EXISTS `activity`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `activity` (
+  `activity_id` int(11) NOT NULL AUTO_INCREMENT,
+  `f_return` int(11) NOT NULL,
+  `f_business` int(11) NOT NULL,
+  PRIMARY KEY (`activity_id`),
+  KEY `f_busines_activity` (`f_business`),
+  KEY `f_return_activity` (`f_return`),
+  CONSTRAINT `f_busines_activity` FOREIGN KEY (`f_business`) REFERENCES `business` (`business_id`),
+  CONSTRAINT `f_return_activity` FOREIGN KEY (`f_return`) REFERENCES `_return` (`return_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `activity`
+--
+
+LOCK TABLES `activity` WRITE;
+/*!40000 ALTER TABLE `activity` DISABLE KEYS */;
+/*!40000 ALTER TABLE `activity` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -178,6 +259,93 @@ CREATE TABLE `boost_ranking` (
 LOCK TABLES `boost_ranking` WRITE;
 /*!40000 ALTER TABLE `boost_ranking` DISABLE KEYS */;
 /*!40000 ALTER TABLE `boost_ranking` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `business`
+--
+
+DROP TABLE IF EXISTS `business`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `business` (
+  `rate` float(10,2) DEFAULT NULL,
+  `value` float(10,2) DEFAULT NULL,
+  `invoice` varchar(255) DEFAULT NULL,
+  `date_request` date NOT NULL,
+  `date_delivery` date NOT NULL,
+  `business_id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`business_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `business`
+--
+
+LOCK TABLES `business` WRITE;
+/*!40000 ALTER TABLE `business` DISABLE KEYS */;
+/*!40000 ALTER TABLE `business` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `car`
+--
+
+DROP TABLE IF EXISTS `car`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `car` (
+  `yers` date DEFAULT NULL,
+  `type` varchar(255) DEFAULT NULL,
+  `color` enum('black','white','silver','gray','red','blue','green') DEFAULT NULL,
+  `car_id` int(11) NOT NULL AUTO_INCREMENT,
+  `status` enum('maintenance','rented','sold','in use','damaged','stolen','idle') NOT NULL DEFAULT 'idle',
+  `mark` varchar(255) DEFAULT NULL,
+  `model` varchar(255) DEFAULT NULL,
+  `mileage` float(10,3) NOT NULL DEFAULT '0.000',
+  `plate` varchar(255) NOT NULL,
+  `origion_states` varchar(255) NOT NULL,
+  PRIMARY KEY (`car_id`),
+  UNIQUE KEY `plate` (`plate`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `car`
+--
+
+LOCK TABLES `car` WRITE;
+/*!40000 ALTER TABLE `car` DISABLE KEYS */;
+/*!40000 ALTER TABLE `car` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `code`
+--
+
+DROP TABLE IF EXISTS `code`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `code` (
+  `code_id` int(11) NOT NULL AUTO_INCREMENT,
+  `type_dinamic` tinyint(1) DEFAULT '0',
+  `type_static` tinyint(1) DEFAULT '0',
+  `f_image` int(11) NOT NULL,
+  `price` float(10,2) NOT NULL,
+  PRIMARY KEY (`code_id`),
+  KEY `f_image_code` (`f_image`),
+  CONSTRAINT `f_image_code` FOREIGN KEY (`f_image`) REFERENCES `image` (`image_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `code`
+--
+
+LOCK TABLES `code` WRITE;
+/*!40000 ALTER TABLE `code` DISABLE KEYS */;
+/*!40000 ALTER TABLE `code` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -342,6 +510,61 @@ LOCK TABLES `delivery` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `design`
+--
+
+DROP TABLE IF EXISTS `design`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `design` (
+  `sheet_size_width` int(11) NOT NULL DEFAULT '1024',
+  `sheet_size_height` int(11) NOT NULL DEFAULT '720',
+  `design_id` int(11) NOT NULL AUTO_INCREMENT,
+  `cut_line_width` int(11) NOT NULL DEFAULT '10',
+  `cut_line_height` int(11) NOT NULL DEFAULT '3',
+  `f_type` int(11) NOT NULL,
+  PRIMARY KEY (`design_id`),
+  KEY `f_type_design` (`f_type`),
+  CONSTRAINT `f_type_design` FOREIGN KEY (`f_type`) REFERENCES `type` (`type_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `design`
+--
+
+LOCK TABLES `design` WRITE;
+/*!40000 ALTER TABLE `design` DISABLE KEYS */;
+/*!40000 ALTER TABLE `design` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `designe`
+--
+
+DROP TABLE IF EXISTS `designe`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `designe` (
+  `sheet_size_heght` float(10,3) DEFAULT '720.000',
+  `sheet_size_width` float(10,3) DEFAULT '1024.000',
+  `design_id` int(11) NOT NULL AUTO_INCREMENT,
+  `cut_line_height` float(10,3) DEFAULT '720.000',
+  `cut_line_width` float(10,3) DEFAULT '1024.000',
+  PRIMARY KEY (`design_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `designe`
+--
+
+LOCK TABLES `designe` WRITE;
+/*!40000 ALTER TABLE `designe` DISABLE KEYS */;
+/*!40000 ALTER TABLE `designe` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `doing`
 --
 
@@ -450,6 +673,33 @@ LOCK TABLES `event` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `fines`
+--
+
+DROP TABLE IF EXISTS `fines`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fines` (
+  `deadline` date NOT NULL,
+  `number` varchar(255) NOT NULL,
+  `value` float(10,2) NOT NULL,
+  `f_car` int(11) NOT NULL,
+  PRIMARY KEY (`number`),
+  KEY `f_car_fines` (`f_car`),
+  CONSTRAINT `f_car_fines` FOREIGN KEY (`f_car`) REFERENCES `car` (`car_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fines`
+--
+
+LOCK TABLES `fines` WRITE;
+/*!40000 ALTER TABLE `fines` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fines` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `flag_for_trigger`
 --
 
@@ -501,6 +751,95 @@ CREATE TABLE `freelance` (
 LOCK TABLES `freelance` WRITE;
 /*!40000 ALTER TABLE `freelance` DISABLE KEYS */;
 /*!40000 ALTER TABLE `freelance` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `generic_box`
+--
+
+DROP TABLE IF EXISTS `generic_box`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `generic_box` (
+  `mirror` tinyint(1) NOT NULL DEFAULT '0',
+  `margin` float(10,3) NOT NULL DEFAULT '0.100',
+  `border` float(10,3) NOT NULL DEFAULT '0.100',
+  `padding` float(10,3) NOT NULL DEFAULT '0.100',
+  `rotation` float(10,3) NOT NULL DEFAULT '0.000',
+  `generic_box_id` int(11) NOT NULL AUTO_INCREMENT,
+  `origin_x` float(10,3) NOT NULL DEFAULT '0.000',
+  `origin_y` float(10,3) NOT NULL DEFAULT '0.000',
+  `size_heigh` float(10,3) NOT NULL DEFAULT '720.000',
+  `size_width` float(10,3) NOT NULL DEFAULT '0.000',
+  PRIMARY KEY (`generic_box_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `generic_box`
+--
+
+LOCK TABLES `generic_box` WRITE;
+/*!40000 ALTER TABLE `generic_box` DISABLE KEYS */;
+/*!40000 ALTER TABLE `generic_box` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `image`
+--
+
+DROP TABLE IF EXISTS `image`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `image` (
+  `image_id` int(11) NOT NULL AUTO_INCREMENT,
+  `image` varchar(255) NOT NULL,
+  `is_thumbnail` tinyint(1) NOT NULL DEFAULT '0',
+  `limk` varchar(255) NOT NULL,
+  `f_generic_box` int(11) NOT NULL,
+  PRIMARY KEY (`image_id`),
+  KEY `f_generic_box_image` (`f_generic_box`),
+  CONSTRAINT `f_generic_box_image` FOREIGN KEY (`f_generic_box`) REFERENCES `generic_box` (`generic_box_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `image`
+--
+
+LOCK TABLES `image` WRITE;
+/*!40000 ALTER TABLE `image` DISABLE KEYS */;
+/*!40000 ALTER TABLE `image` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `immobile`
+--
+
+DROP TABLE IF EXISTS `immobile`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `immobile` (
+  `position_latitude` float(10,3) NOT NULL,
+  `position_longitude` float(10,3) NOT NULL,
+  `immobile_id` int(11) NOT NULL AUTO_INCREMENT,
+  `status` enum('maintenance','rented','sold','in use','damaged','idle') NOT NULL DEFAULT 'idle',
+  `price` float(10,2) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `number` int(11) NOT NULL,
+  `size_width` float(10,3) DEFAULT NULL,
+  `size_height` float(10,3) DEFAULT NULL,
+  PRIMARY KEY (`immobile_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `immobile`
+--
+
+LOCK TABLES `immobile` WRITE;
+/*!40000 ALTER TABLE `immobile` DISABLE KEYS */;
+/*!40000 ALTER TABLE `immobile` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -641,6 +980,65 @@ LOCK TABLES `personality` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `present`
+--
+
+DROP TABLE IF EXISTS `present`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `present` (
+  `present_id` int(11) NOT NULL AUTO_INCREMENT,
+  `enable` tinyint(1) DEFAULT '0',
+  `f_stock` int(11) NOT NULL,
+  `f_design` int(11) NOT NULL,
+  PRIMARY KEY (`present_id`),
+  KEY `f_stock_present` (`f_stock`),
+  KEY `f_design_presents` (`f_design`),
+  CONSTRAINT `f_design_presents` FOREIGN KEY (`f_design`) REFERENCES `design` (`design_id`),
+  CONSTRAINT `f_stock_present` FOREIGN KEY (`f_stock`) REFERENCES `stock` (`stock_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `present`
+--
+
+LOCK TABLES `present` WRITE;
+/*!40000 ALTER TABLE `present` DISABLE KEYS */;
+/*!40000 ALTER TABLE `present` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `product`
+--
+
+DROP TABLE IF EXISTS `product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `product` (
+  `lot` varchar(255) DEFAULT NULL,
+  `type` varchar(255) DEFAULT NULL,
+  `prive` float(10,3) NOT NULL,
+  `volume` float(10,5) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `weight` float(10,5) DEFAULT NULL,
+  `product_id` int(11) NOT NULL AUTO_INCREMENT,
+  `serial_number` varchar(255) DEFAULT NULL,
+  `validity` datetime NOT NULL,
+  PRIMARY KEY (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `product`
+--
+
+LOCK TABLES `product` WRITE;
+/*!40000 ALTER TABLE `product` DISABLE KEYS */;
+/*!40000 ALTER TABLE `product` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `profile`
 --
 
@@ -698,6 +1096,37 @@ LOCK TABLES `promotion` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `provides`
+--
+
+DROP TABLE IF EXISTS `provides`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `provides` (
+  `provides_id` int(11) NOT NULL AUTO_INCREMENT,
+  `f_profile` int(11) NOT NULL,
+  `f_contract` int(11) NOT NULL,
+  `f_business` int(11) NOT NULL,
+  PRIMARY KEY (`provides_id`),
+  KEY `f_profile_provides` (`f_profile`),
+  KEY `f_contracit_provides` (`f_contract`),
+  KEY `f_business_provides` (`f_business`),
+  CONSTRAINT `f_business_provides` FOREIGN KEY (`f_business`) REFERENCES `business` (`business_id`),
+  CONSTRAINT `f_contracit_provides` FOREIGN KEY (`f_contract`) REFERENCES `contract` (`contract_id`),
+  CONSTRAINT `f_profile_provides` FOREIGN KEY (`f_profile`) REFERENCES `profile` (`profile_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `provides`
+--
+
+LOCK TABLES `provides` WRITE;
+/*!40000 ALTER TABLE `provides` DISABLE KEYS */;
+/*!40000 ALTER TABLE `provides` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `ranking`
 --
 
@@ -729,6 +1158,91 @@ LOCK TABLES `ranking` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `rant`
+--
+
+DROP TABLE IF EXISTS `rant`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `rant` (
+  `schendule` datetime NOT NULL,
+  `price` float(10,2) NOT NULL,
+  `installment` int(11) NOT NULL DEFAULT '1',
+  `period_begin` date NOT NULL,
+  `priod_end` date NOT NULL,
+  `f_business` int(11) NOT NULL,
+  KEY `f_business_rent` (`f_business`),
+  CONSTRAINT `f_business_rent` FOREIGN KEY (`f_business`) REFERENCES `business` (`business_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rant`
+--
+
+LOCK TABLES `rant` WRITE;
+/*!40000 ALTER TABLE `rant` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rant` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `room`
+--
+
+DROP TABLE IF EXISTS `room`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `room` (
+  `avaliable` int(11) DEFAULT '0',
+  `equipped` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `size_width` float(10,2) DEFAULT NULL,
+  `size_height` float(10,2) DEFAULT NULL,
+  `f_immobile` int(11) NOT NULL,
+  `floor_number` int(11) DEFAULT NULL,
+  KEY `f_immobile_room` (`f_immobile`),
+  CONSTRAINT `f_immobile_room` FOREIGN KEY (`f_immobile`) REFERENCES `immobile` (`immobile_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `room`
+--
+
+LOCK TABLES `room` WRITE;
+/*!40000 ALTER TABLE `room` DISABLE KEYS */;
+/*!40000 ALTER TABLE `room` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sale`
+--
+
+DROP TABLE IF EXISTS `sale`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sale` (
+  `schedule` date NOT NULL,
+  `price` float(10,2) NOT NULL,
+  `quantity` int(11) NOT NULL DEFAULT '1',
+  `installment` int(11) NOT NULL DEFAULT '1',
+  `serial_number` varchar(255) NOT NULL,
+  `f_business` int(11) NOT NULL,
+  KEY `f_business_sale` (`f_business`),
+  CONSTRAINT `f_business_sale` FOREIGN KEY (`f_business`) REFERENCES `business` (`business_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sale`
+--
+
+LOCK TABLES `sale` WRITE;
+/*!40000 ALTER TABLE `sale` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sale` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `search`
 --
 
@@ -753,6 +1267,62 @@ CREATE TABLE `search` (
 LOCK TABLES `search` WRITE;
 /*!40000 ALTER TABLE `search` DISABLE KEYS */;
 /*!40000 ALTER TABLE `search` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `service`
+--
+
+DROP TABLE IF EXISTS `service`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `service` (
+  `type` enum('bartender','cook','security','porter','cashier','electrician','illuminator','driver','musical band','D.J.','promoter','singer','fireman','paramedc','garçon','helper','decorator','makeup artist','camera man','presenter') NOT NULL DEFAULT 'helper',
+  `description` varchar(255) NOT NULL,
+  `benefits_value` float(10,2) DEFAULT NULL,
+  `schendule_begin` date NOT NULL,
+  `schendule_end` date NOT NULL,
+  `f_business` int(11) NOT NULL,
+  KEY `f_business_service` (`f_business`),
+  CONSTRAINT `f_business_service` FOREIGN KEY (`f_business`) REFERENCES `business` (`business_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `service`
+--
+
+LOCK TABLES `service` WRITE;
+/*!40000 ALTER TABLE `service` DISABLE KEYS */;
+/*!40000 ALTER TABLE `service` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `settings`
+--
+
+DROP TABLE IF EXISTS `settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `settings` (
+  `f_generic_box` int(11) NOT NULL,
+  `settings_id` int(11) NOT NULL AUTO_INCREMENT,
+  `f_design` int(11) NOT NULL,
+  PRIMARY KEY (`settings_id`),
+  KEY `f_design_settings` (`f_design`),
+  KEY `f_generc_box_settings` (`f_generic_box`),
+  CONSTRAINT `f_design_settings` FOREIGN KEY (`f_design`) REFERENCES `design` (`design_id`),
+  CONSTRAINT `f_generc_box_settings` FOREIGN KEY (`f_generic_box`) REFERENCES `generic_box` (`generic_box_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `settings`
+--
+
+LOCK TABLES `settings` WRITE;
+/*!40000 ALTER TABLE `settings` DISABLE KEYS */;
+/*!40000 ALTER TABLE `settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -894,6 +1464,87 @@ LOCK TABLES `studies` WRITE;
 /*!40000 ALTER TABLE `studies` DISABLE KEYS */;
 /*!40000 ALTER TABLE `studies` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `text`
+--
+
+DROP TABLE IF EXISTS `text`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `text` (
+  `link` varchar(255) NOT NULL,
+  `owner` varchar(255) DEFAULT NULL,
+  `identifiers` enum('party','work','friends','rand') NOT NULL DEFAULT 'rand',
+  `text_id` int(11) NOT NULL AUTO_INCREMENT,
+  `text_title` varchar(255) DEFAULT NULL,
+  `text_contents` text NOT NULL,
+  `f_generic_box` int(11) NOT NULL,
+  PRIMARY KEY (`text_id`),
+  KEY `f_generic_boc_text` (`f_generic_box`),
+  CONSTRAINT `f_generic_boc_text` FOREIGN KEY (`f_generic_box`) REFERENCES `generic_box` (`generic_box_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `text`
+--
+
+LOCK TABLES `text` WRITE;
+/*!40000 ALTER TABLE `text` DISABLE KEYS */;
+/*!40000 ALTER TABLE `text` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `type`
+--
+
+DROP TABLE IF EXISTS `type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `type` (
+  `type_id` int(11) NOT NULL AUTO_INCREMENT,
+  `number_of_child` int(11) NOT NULL,
+  `name_of_type` enum('profile','product','car','stock','company','freelance','inmobile','promotion','contract') NOT NULL,
+  PRIMARY KEY (`type_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `type`
+--
+
+LOCK TABLES `type` WRITE;
+/*!40000 ALTER TABLE `type` DISABLE KEYS */;
+/*!40000 ALTER TABLE `type` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `video`
+--
+
+DROP TABLE IF EXISTS `video`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `video` (
+  `link` varchar(255) NOT NULL,
+  `video` varchar(255) NOT NULL,
+  `video_id` int(11) NOT NULL AUTO_INCREMENT,
+  `f_generic_box` int(11) NOT NULL,
+  PRIMARY KEY (`video_id`),
+  KEY `f_generic_box_video` (`f_generic_box`),
+  CONSTRAINT `f_generic_box_video` FOREIGN KEY (`f_generic_box`) REFERENCES `generic_box` (`generic_box_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `video`
+--
+
+LOCK TABLES `video` WRITE;
+/*!40000 ALTER TABLE `video` DISABLE KEYS */;
+/*!40000 ALTER TABLE `video` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -904,4 +1555,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-05-29 22:51:05
+-- Dump completed on 2017-06-01  0:55:53
